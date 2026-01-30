@@ -3,6 +3,11 @@
  * Initializes all components and handles global state
  */
 
+// Import styles
+import './styles/variables.css';
+import './styles/base.css';
+import './styles/components.css';
+
 import { initChartUploader } from './components/ChartUploader.js';
 import { initCurrencySelector } from './components/CurrencySelector.js';
 import { initTimeframeSelector } from './components/TimeframeSelector.js';
@@ -72,10 +77,10 @@ function initApp() {
  * Update analyze button state
  */
 function updateAnalyzeButton() {
-  const canAnalyze = appState.chartImage && 
-                     appState.selectedCurrency && 
-                     appState.selectedTimeframe &&
-                     !appState.isAnalyzing;
+  const canAnalyze = appState.chartImage &&
+    appState.selectedCurrency &&
+    appState.selectedTimeframe &&
+    !appState.isAnalyzing;
   analyzeBtn.disabled = !canAnalyze;
 }
 
@@ -103,7 +108,7 @@ function clearChartPreview() {
 function initHeatmap() {
   const heatmapGrid = document.getElementById('heatmap-grid');
   const cells = 28; // 7x4 grid
-  
+
   for (let i = 0; i < cells; i++) {
     const cell = document.createElement('div');
     cell.className = 'heatmap-cell';
@@ -181,7 +186,7 @@ function updateAnalysisDisplay(result) {
  */
 function updateHeatmap(heatmapData) {
   const cells = document.querySelectorAll('.heatmap-cell');
-  
+
   cells.forEach((cell, index) => {
     const value = heatmapData[index] || 0;
     let hue, saturation, lightness;
@@ -213,7 +218,7 @@ function updateHeatmap(heatmapData) {
  */
 function updateSentimentRadar(sentiment) {
   const radarEl = document.getElementById('sentiment-radar');
-  
+
   radarEl.innerHTML = `
     <div class="radar-chart">
       <div class="sentiment-items">
@@ -264,7 +269,7 @@ function getColorForValue(value) {
  */
 function updateReport(result) {
   const reportContent = document.getElementById('report-content');
-  
+
   reportContent.innerHTML = `
     <div class="report-section">
       <div class="report-section-title">📊 テクニカル分析</div>
