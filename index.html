@@ -11,6 +11,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Direct CSS imports for stability -->
+    <link rel="stylesheet" href="/src/styles/variables.css">
+    <link rel="stylesheet" href="/src/styles/base.css">
+    <link rel="stylesheet" href="/src/styles/components.css">
+
+    <script>
+        window.onerror = function (msg, url, line, col, error) {
+            console.error('Global Error:', msg, url, line, col, error);
+            // Only show alert if critical init fails, to avoid annoying user for minor things
+            // But for now, we want to know if main.js fails
+        };
+    </script>
 </head>
 
 <body>
