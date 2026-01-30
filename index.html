@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trading AI - 次世代FX AI分析プラットフォーム。テクニカル分析とファンダメンタル分析を融合したAI駆動の為替予測">
+    <meta name="keywords" content="FX, 為替, AI分析, テクニカル分析, ファンダメンタル分析, トレード">
+    <title>Trading AI | FX AI Analysis Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles/variables.css">
+    <link rel="stylesheet" href="/src/styles/base.css">
+    <link rel="stylesheet" href="/src/styles/components.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">◈</span>
+                    <span class="logo-text">Trading AI</span>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn" id="pricing-btn">
+                        <span class="btn-icon">⬡</span>
+                        Upgrade
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-container">
+            <!-- Left Panel: Controls & Upload -->
+            <section class="control-panel glass-panel">
+                <h2 class="panel-title">Chart Settings</h2>
+
+                <!-- Currency Selector -->
+                <div class="control-group" id="currency-selector"></div>
+
+                <!-- Timeframe Selector -->
+                <div class="control-group" id="timeframe-selector"></div>
+
+                <!-- Chart Upload Area -->
+                <div class="upload-area" id="chart-uploader">
+                    <div class="upload-zone" id="drop-zone">
+                        <div class="upload-icon">📊</div>
+                        <p class="upload-text">Drag & Drop Chart Image</p>
+                        <p class="upload-hint">または クリックしてファイルを選択</p>
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                    </div>
+                    <div class="preview-container" id="preview-container" style="display: none;">
+                        <img id="chart-preview" alt="Chart Preview">
+                        <button class="remove-btn" id="remove-chart">✕</button>
+                    </div>
+                </div>
+
+                <!-- Analyze Button -->
+                <button class="analyze-btn" id="analyze-btn" disabled>
+                    <span class="btn-glow"></span>
+                    <span class="btn-text">🔮 AIで分析する</span>
+                </button>
+            </section>
+
+            <!-- Center: Chart Display (Background) -->
+            <section class="chart-display glass-panel">
+                <div class="chart-header">
+                    <span class="chart-pair" id="selected-pair">USD/JPY</span>
+                    <span class="chart-timeframe" id="selected-timeframe">1H</span>
+                </div>
+                <div class="chart-canvas" id="chart-canvas">
+                    <div class="chart-placeholder">
+                        <p>チャート画像をアップロードしてください</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: AI Insights -->
+            <section class="insights-panel glass-panel">
+                <h2 class="panel-title">AI Insights</h2>
+
+                <!-- Probability Gauge -->
+                <div class="probability-section" id="probability-display">
+                    <div class="probability-header">
+                        <span class="probability-label">Market Direction</span>
+                    </div>
+                    <div class="probability-gauge">
+                        <div class="gauge-bar">
+                            <div class="gauge-fill bearish" style="width: 50%"></div>
+                            <div class="gauge-fill bullish" style="width: 50%"></div>
+                        </div>
+                        <div class="gauge-labels">
+                            <span class="bear-label">🐻 Bear</span>
+                            <span class="bull-label">Bull 🐂</span>
+                        </div>
+                    </div>
+                    <div class="probability-values">
+                        <span class="bear-value" id="bear-probability">--%</span>
+                        <span class="bull-value" id="bull-probability">--%</span>
+                    </div>
+                </div>
+
+                <!-- Heatmap -->
+                <div class="heatmap-section">
+                    <h3 class="section-title">Bullish/Bearish Heatmap</h3>
+                    <div class="heatmap" id="heatmap">
+                        <div class="heatmap-grid" id="heatmap-grid">
+                            <!-- Generated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sentiment Radar -->
+                <div class="sentiment-section">
+                    <h3 class="section-title">News Sentiment Radar</h3>
+                    <div class="sentiment-radar" id="sentiment-radar">
+                        <div class="radar-placeholder">
+                            <span class="radar-text">分析待機中...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Report -->
+                <div class="analysis-report" id="analysis-report">
+                    <h3 class="section-title">Analysis Report</h3>
+                    <div class="report-content" id="report-content">
+                        <p class="report-placeholder">チャートをアップロードして分析を開始してください</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Pricing Modal -->
+        <div class="modal-overlay" id="pricing-modal" style="display: none;">
+            <div class="pricing-modal glass-panel">
+                <button class="modal-close" id="close-modal">✕</button>
+                <h2 class="modal-title">Upgrade Your Edge</h2>
+                <p class="modal-subtitle">取引の優位性を高めるプランを選択</p>
+
+                <div class="pricing-cards">
+                    <!-- Free Plan -->
+                    <div class="pricing-card free">
+                        <div class="card-header">
+                            <h3 class="plan-name">Free</h3>
+                            <div class="plan-price">
+                                <span class="price">¥0</span>
+                                <span class="period">/月</span>
+                            </div>
+                        </div>
+                        <ul class="plan-features">
+                            <li>1 Analysis/Day</li>
+                            <li>Basic Chart Analysis</li>
+                            <li>Limited History</li>
+                        </ul>
+                        <button class="plan-btn free-btn">Current Plan</button>
+                    </div>
+
+                    <!-- Standard Plan -->
+                    <div class="pricing-card standard">
+                        <div class="card-header">
+                            <h3 class="plan-name">Standard</h3>
+                            <div class="plan-price">
+                                <span class="price">¥2,980</span>
+                                <span class="period">/月</span>
+                            </div>
+                        </div>
+                        <ul class="plan-features">
+                            <li>20 Analyses/Day</li>
+                            <li>Basic Fundamentals + Probability</li>
+                            <li>7-Day History</li>
+                            <li>Email Support</li>
+                        </ul>
+                        <button class="plan-btn standard-btn">Upgrade</button>
+                    </div>
+
+                    <!-- Pro Plan -->
+                    <div class="pricing-card pro">
+                        <div class="card-glow"></div>
+                        <div class="pro-badge">RECOMMENDED</div>
+                        <div class="card-header">
+                            <h3 class="plan-name">Pro</h3>
+                            <div class="plan-price">
+                                <span class="price">¥9,800</span>
+                                <span class="period">/月</span>
+                            </div>
+                        </div>
+                        <ul class="plan-features">
+                            <li>Unlimited Analyses</li>
+                            <li>Institutional Grade Reports</li>
+                            <li>Real-time News Sentiment</li>
+                            <li>Advanced Pattern Recognition</li>
+                            <li>Priority Support</li>
+                        </ul>
+                        <div class="status-badge">
+                            <span class="status-dot"></span>
+                            Status: Active (Auto-Renewal ON)
+                        </div>
+                        <button class="plan-btn pro-btn">Manage Subscription</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">AI分析中...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

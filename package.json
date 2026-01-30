@@ -1,0 +1,17 @@
+{
+  "name": "fx-ai-analyze",
+  "version": "1.0.0",
+  "description": "FX AI Analysis Platform - AI-powered forex trading analysis",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["fx", "forex", "trading", "ai", "analysis"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
