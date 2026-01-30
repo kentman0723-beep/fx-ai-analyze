@@ -83,9 +83,9 @@ function createAnalysisPrompt(currency, timeframe) {
 {
   "bullishProbability": 上昇確率（0-100の数値）,
   "bearishProbability": 下落確率（0-100の数値）,
-  "technicalAnalysis": "テクニカル分析の詳細（トレンド、サポート/レジスタンス、移動平均線、RSI、MACDなどの分析）",
+  "technicalAnalysis": "テクニカル分析の詳細（'サポートラインにタッチしたらダブルボトムが形成される可能性'などの具体的なチャートパターンの分析、移動平均線、RSIなどの指標を用いた分析）",
   "fundamentalAnalysis": "ファンダメンタル分析の観点からの考察（経済指標、金融政策、地政学リスクなど）",
-  "recommendation": "推奨アクション（買い/売り/様子見）とその理由",
+  "recommendation": "推奨アクション（ロング/ショート/様子見）とその理由（'サポートライン付近での反発狙い'など具体的に）",
   "risks": "主なリスク要因と注意点",
   "sentiment": {
     "economic": 経済指標のポジティブ度（0-100）,
@@ -163,20 +163,29 @@ function simulateAnalysis(currency, timeframe) {
             // Generate random but realistic-looking results
             const bullishProb = Math.round(35 + Math.random() * 30);
             const bearishProb = 100 - bullishProb;
+            const isBullish = bullishProb > 50;
 
-            const trends = ['上昇トレンド', '下降トレンド', 'レンジ相場'];
-            const trend = trends[Math.floor(Math.random() * trends.length)];
+            const trend = isBullish ? '上昇トレンド' : '下降トレンド';
+            const action = isBullish ? 'ロング' : 'ショート';
 
-            const actions = ['買い', '売り', '様子見'];
-            const action = actions[Math.floor(Math.random() * actions.length)];
+            // Random technical patterns
+            const patterns = [
+                'サポートライン付近での反発',
+                'レジスタンスラインでの上値抑制',
+                'ダブルボトム形成の兆候',
+                'ヘッドアンドショルダー形成の可能性',
+                '移動平均線のゴールデンクロス',
+                'ボリンジャーバンドのスクイーズからのエクスパンション'
+            ];
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
 
             resolve({
                 bullishProbability: bullishProb,
                 bearishProbability: bearishProb,
-                technicalAnalysis: `現在の${currency}チャート（${timeframe}足）を分析した結果、${trend}の傾向が見られます。移動平均線（MA20, MA50）はゴールデンクロス/デッドクロスの可能性を示唆しており、RSIは${30 + Math.round(Math.random() * 40)}付近で推移しています。ボリンジャーバンドは${Math.random() > 0.5 ? '拡大' : '収束'}傾向にあり、ボラティリティの${Math.random() > 0.5 ? '上昇' : '低下'}が予想されます。`,
-                fundamentalAnalysis: `${currency.split('/')[0]}の経済指標は堅調に推移しており、中央銀行の金融政策も現在のトレンドを支持しています。一方、${currency.split('/')[1]}側では、最近の経済データがやや弱含みとなっており、通貨安圧力がかかっています。地政学的リスクは限定的ですが、今後の主要経済イベントには注意が必要です。`,
-                recommendation: `${action}を推奨します。${action === '買い' ? 'エントリーポイントは現在の水準から少し下での押し目買いが理想的です。' : action === '売り' ? '戻り売りを狙い、直近のレジスタンスライン付近でのエントリーを検討してください。' : '現在は明確なトレンドが形成されにくい状況です。次のブレイクアウトを待つことをお勧めします。'}`,
-                risks: `主なリスクとして、1) 突発的なニュースによる急変動、2) 主要経済指標の発表（雇用統計、GDP、金利決定など）、3) 流動性の低い時間帯でのスプレッド拡大が挙げられます。ストップロスの設定を忘れずに、リスク管理を徹底してください。`,
+                technicalAnalysis: `現在の${currency}チャート（${timeframe}）では${trend}が確認されます。特に${pattern}が見受けられ、テクニカル的な転換点または継続シグナルが出ています。直近のサポートラインにタッチ後の反発挙動は、ダブルボトムが形成される可能性を強く示唆しており、ここからの押し目買い（ロング）が優位性を持つ局面です。RSIは調整局面を示しており、過熱感は和らいでいます。`,
+                fundamentalAnalysis: `${currency.split('/')[0]}の主要経済指標は市場予想を上回り、実需のフローも堅調です。特に中央銀行のタカ派的な発言が通貨高をサポートしています。対して${currency.split('/')[1]}は地政学リスクの高まりからリスク回避的な動きが見られます。`,
+                recommendation: `${action}推奨。サポートライン（支持線）付近でのエントリーを推奨します。${isBullish ? '直近高値をターゲットとし、安値割れでストップロスを設定してください。' : '直近安値をターゲットとし、高値更新でストップロスを設定してください。'} リスクリワード比は1:2以上を確保できる水準です。`,
+                risks: `下落リスクとして、突発的な要人発言による急変動に注意が必要です。また、流動性が低下する時間帯でのスプレッド拡大も考慮してください。ダマシ（Fakeout）によるストップ狩りにも警戒が必要です。`,
                 sentiment: {
                     economic: 40 + Math.round(Math.random() * 30),
                     market: 35 + Math.round(Math.random() * 35),

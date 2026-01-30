@@ -13,6 +13,7 @@ import { initCurrencySelector } from './components/CurrencySelector.js';
 import { initTimeframeSelector } from './components/TimeframeSelector.js';
 import { initAnalysisPanel } from './components/AnalysisPanel.js';
 import { initPricingModal } from './components/PricingModal.js';
+import { initLiveChart, updateChart } from './components/LiveChart.js';
 import { analyzeChart } from './services/aiAnalyzer.js';
 
 // Application State
@@ -40,6 +41,7 @@ function initApp() {
     appState.selectedCurrency = currency;
     selectedPairEl.textContent = currency;
     updateAnalyzeButton();
+    updateChart(currency);
   });
 
   initTimeframeSelector((timeframe) => {
@@ -53,6 +55,8 @@ function initApp() {
       appState.chartImage = imageData;
       displayChartPreview(imageData);
       updateAnalyzeButton();
+      // Auto switch to uploaded image tab
+      switchTab('uploaded-image');
     },
     onRemove: () => {
       appState.chartImage = null;
@@ -70,7 +74,55 @@ function initApp() {
   // Initialize heatmap
   initHeatmap();
 
+  // Initialize Live Chart
+  initLiveChart('tradingview-widget-container', appState.selectedCurrency);
+
+  // Tab Switching Logic
+  setupTabs();
+
   console.log('FX AI Analysis Platform initialized');
+}
+
+function setupTabs() {
+  const tabLive = document.getElementById('tab-live-chart');
+  const tabUpload = document.getElementById('tab-uploaded-image');
+
+  tabLive.addEventListener('click', () => switchTab('live-chart'));
+  tabUpload.addEventListener('click', () => switchTab('uploaded-image'));
+}
+
+function switchTab(tabName) {
+  const tabLive = document.getElementById('tab-live-chart');
+  const tabUpload = document.getElementById('tab-uploaded-image');
+  const containerLive = document.getElementById('tradingview-widget-container');
+  const containerUpload = document.getElementById('chart-canvas');
+
+  if (tabName === 'live-chart') {
+    tabLive.classList.add('active');
+    tabLive.style.color = 'var(--color-bg-primary)';
+    tabLive.style.background = 'var(--color-teal)';
+
+    tabUpload.classList.remove('active');
+    tabUpload.style.color = 'var(--color-text-muted)';
+    tabUpload.style.background = 'transparent';
+
+    containerLive.style.display = 'block';
+    containerUpload.style.display = 'none';
+
+    // Refresh chart if needed (sometimes iframe likes to be reloaded if hidden)
+    // updateChart(appState.selectedCurrency); 
+  } else {
+    tabUpload.classList.add('active');
+    tabUpload.style.color = 'var(--color-bg-primary)';
+    tabUpload.style.background = 'var(--color-teal)';
+
+    tabLive.classList.remove('active');
+    tabLive.style.color = 'var(--color-text-muted)';
+    tabLive.style.background = 'transparent';
+
+    containerLive.style.display = 'none';
+    containerUpload.style.display = 'flex'; // Flex for centering
+  }
 }
 
 /**

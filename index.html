@@ -88,17 +88,52 @@
                         AIで分析する
                     </span>
                 </button>
+
+                <!-- Ad Section -->
+                <div class="ad-section"
+                    style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--color-border);">
+                    <p class="ad-label"
+                        style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">Sponsored</p>
+                    <a href="#" class="ad-banner"
+                        style="display: block; background: linear-gradient(135deg, #1a1f2a 0%, #0f172a 100%); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1rem; text-align: center; transition: all 0.3s ease;">
+                        <div style="font-weight: bold; color: var(--color-gold); margin-bottom: 0.25rem;">XM Trading
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--color-text-secondary);">口座開設で¥13,000ボーナス</div>
+                    </a>
+                </div>
             </section>
 
             <!-- Center: Chart Display (Background) -->
+            <!-- Center: Chart Display (Background) -->
             <section class="chart-display glass-panel">
                 <div class="chart-header">
-                    <span class="chart-pair" id="selected-pair">USD/JPY</span>
-                    <span class="chart-timeframe" id="selected-timeframe">1H</span>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <span class="chart-pair" id="selected-pair">USD/JPY</span>
+                        <span class="chart-timeframe" id="selected-timeframe">1H</span>
+                    </div>
+
+                    <div class="chart-tabs"
+                        style="display: flex; background: var(--color-bg-tertiary); padding: 4px; border-radius: var(--radius-full);">
+                        <button class="chart-tab active" id="tab-live-chart"
+                            style="padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 500;">Live
+                            Chart</button>
+                        <button class="chart-tab" id="tab-uploaded-image"
+                            style="padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 500; color: var(--color-text-muted);">Uploaded
+                            Image</button>
+                    </div>
                 </div>
-                <div class="chart-canvas" id="chart-canvas">
-                    <div class="chart-placeholder">
-                        <p>チャート画像をアップロードしてください</p>
+
+                <div class="chart-body"
+                    style="flex: 1; position: relative; overflow: hidden; border-radius: var(--radius-md);">
+                    <!-- Live Chart Container -->
+                    <div id="tradingview-widget-container" style="width: 100%; height: 100%;"></div>
+
+                    <!-- Uploaded Image Container (Initially Hidden) -->
+                    <div id="chart-canvas" class="chart-canvas"
+                        style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
+                        <div class="chart-placeholder">
+                            <p>画像がアップロードされていません</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -238,6 +273,7 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script type="module" src="/src/main.js"></script>
 </body>
 
